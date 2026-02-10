@@ -10,8 +10,8 @@ import SwiftUI
 @main
 struct ShaperApp: App {
     var body: some Scene {
-        DocumentGroup(newDocument: ShaperDocument()) { file in
-            ContentView(document: file.$document)
+        WindowGroup {
+            ContentView()
         }
     }
 }

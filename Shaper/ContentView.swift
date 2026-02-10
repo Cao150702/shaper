@@ -8,13 +8,16 @@
 import SwiftUI
 
 struct ContentView: View {
-    @Binding var document: ShaperDocument
+    @StateObject private var appState = AppState()
 
     var body: some View {
-        TextEditor(text: $document.text)
+        NavigationStack {
+            HomeView()
+        }
+        .environmentObject(appState)
     }
 }
 
 #Preview {
-    ContentView(document: .constant(ShaperDocument()))
+    ContentView()
 }

@@ -1,0 +1,11 @@
+.DS_Store
+
+# Xcode
+*.xcuserstate
+*.xcuserdata/
+
+# Python
+__pycache__/
+*.pyc
+server/.venv/
+server/__pycache__/

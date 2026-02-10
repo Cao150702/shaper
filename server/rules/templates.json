@@ -1,0 +1,26 @@
+[
+  {
+    "name": "学校模板",
+    "body": {"font": "宋体", "size": 12, "line_spacing": 1.5, "first_line_indent_em": 2},
+    "document_title": {"font": "黑体", "size": 18, "bold": true, "alignment": "center"},
+    "titles": [
+      {"level": 1, "font": "黑体", "size": 16, "bold": true, "alignment": "center"},
+      {"level": 2, "font": "黑体", "size": 14, "bold": true, "alignment": "leading"},
+      {"level": 3, "font": "黑体", "size": 12, "bold": true, "alignment": "leading"}
+    ],
+    "page": {"margin_cm": 2.5, "header": true, "footer": true, "page_number": "bottom_center"},
+    "toc": {"enable": true}
+  },
+  {
+    "name": "通用论文模板",
+    "body": {"font": "宋体", "size": 12, "line_spacing": 1.5, "first_line_indent_em": 2},
+    "document_title": {"font": "黑体", "size": 18, "bold": true, "alignment": "center"},
+    "titles": [
+      {"level": 1, "font": "黑体", "size": 16, "bold": true, "alignment": "center"},
+      {"level": 2, "font": "黑体", "size": 14, "bold": true, "alignment": "leading"},
+      {"level": 3, "font": "黑体", "size": 12, "bold": true, "alignment": "leading"}
+    ],
+    "page": {"margin_cm": 2.5, "header": true, "footer": true, "page_number": "bottom_center"},
+    "toc": {"enable": true}
+  }
+]
