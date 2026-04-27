@@ -9,3 +9,26 @@ __pycache__/
 *.pyc
 server/.venv/
 server/__pycache__/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Xcode
+DerivedData/
+*.xcuserstate
+*.xcuserdatad
+xcuserdata/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
