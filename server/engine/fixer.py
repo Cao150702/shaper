@@ -9,7 +9,8 @@ from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.shared import Cm, Pt
 
-from .heading import detect_heading_level
+from .fields import toc_paragraph_elements
+from .heading import detect_heading_level, find_document_title
 
 
 def _iter_paragraphs(doc):
@@ -102,6 +103,7 @@ def _apply_document_title(paragraph, rule: dict[str, Any]):
         paragraph.alignment = WD_ALIGN_PARAGRAPH.LEFT
 
     _set_paragraph_line_spacing(paragraph, 1.5)
+    paragraph.paragraph_format.first_line_indent = Pt(0)
 
     for run in paragraph.runs:
         if not run.text.strip():
@@ -127,11 +129,11 @@ def _add_field(paragraph, field_instr: str):
 
 
 def _ensure_toc(doc: Document):
-    toc_field = "TOC \\\\o \"1-3\" \\\\h \\\\z \\\\u"
+    if toc_paragraph_elements(doc):
+        return
+    toc_field = r'TOC \o "1-3" \h \z \u'
     if doc.paragraphs:
         first = doc.paragraphs[0]
-        if "TOC" in first.text:
-            return
         insert_target = first.insert_paragraph_before()
     else:
         insert_target = doc.add_paragraph()
@@ -172,22 +174,19 @@ def apply_fixes(data: bytes, rule: dict[str, Any]) -> bytes:
     if rule.get("toc", {}).get("enable", False):
         _ensure_toc(doc)
 
+    toc_paragraphs = toc_paragraph_elements(doc)
     document_title = rule.get("document_title")
-    if document_title:
-        for paragraph in doc.paragraphs:
-            text = paragraph.text.strip()
-            if not text:
-                continue
-            if detect_heading_level(paragraph):
-                break
-            if len(text) > 40:
-                break
-            _apply_document_title(paragraph, document_title)
-            break
+    title = find_document_title(doc, toc_paragraphs) if document_title else None
 
     for paragraph in _iter_paragraphs(doc):
+        if paragraph._p in toc_paragraphs:
+            continue
         text = paragraph.text.strip()
         if not text:
+            continue
+
+        if title is not None and paragraph._p is title._p:
+            _apply_document_title(paragraph, document_title)
             continue
 
         level = detect_heading_level(paragraph)
@@ -199,3 +198,4 @@ def apply_fixes(data: bytes, rule: dict[str, Any]) -> bytes:
     output = io.BytesIO()
     doc.save(output)
     return output.getvalue()
+

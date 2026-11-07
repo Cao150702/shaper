@@ -58,3 +58,18 @@ def detect_heading_level(paragraph) -> int | None:
     if level:
         return level
     return detect_heading_level_from_text(paragraph.text)
+
+
+def find_document_title(doc, excluded_paragraphs=()):
+    """Use the first short, non-heading paragraph as the document title."""
+    for paragraph in doc.paragraphs:
+        if paragraph._p in excluded_paragraphs:
+            continue
+        text = paragraph.text.strip()
+        if not text:
+            continue
+        if detect_heading_level(paragraph) or len(text) > 40:
+            return None
+        return paragraph
+    return None
+

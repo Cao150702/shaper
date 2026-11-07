@@ -43,6 +43,18 @@ python3 -m venv .venv
 
 > 目录与页码是 Word 字段，打开文档后请更新域（F9 或右键更新域）。
 
+重复修复会复用文档内已有的 TOC 域（包括复杂域、简单域和内容控件内的域），不会再次插入目录；已有目录的缓存内容和样式会保留。仅有“目录”文字或手工目录不视为 TOC 域。论文标题仍按首个不超过 40 字的非空、非章节标题段落识别，并与正文分别应用格式。
+
+## 服务端回归测试
+
+安装 `server/requirements.txt` 后，从仓库根目录运行：
+
+```bash
+PYTHONPATH=server python -m unittest discover -s server/tests -v
+```
+
+测试使用现场生成的 DOCX，覆盖重复修复、已有目录域、论文标题和正文/章节/表格样式，并检查生成文件可重新读取，不需要真实论文或外部服务。
+
 ## 目录结构
 ```
 Shaper/
@@ -55,3 +67,4 @@ Shaper/
 - `POST /analyze` 分析违规项
 - `POST /fix` 单文件修复
 - `POST /batch-fix` 批量修复
+

@@ -4,7 +4,8 @@ from typing import Any
 
 from docx.shared import Pt
 
-from .heading import detect_heading_level
+from .fields import toc_paragraph_elements
+from .heading import detect_heading_level, find_document_title
 from .parser import DocumentSnapshot
 
 
@@ -30,8 +31,17 @@ def build_violation_report(document: DocumentSnapshot, rule: dict[str, Any]) -> 
     heading_gap_reported = False
 
     expected_indent = Pt(body_size * indent_em)
+    toc_paragraphs = toc_paragraph_elements(document.doc)
+    title = (
+        find_document_title(document.doc, toc_paragraphs)
+        if rule.get("document_title") else None
+    )
 
     for paragraph in _iter_paragraphs(document.doc):
+        if paragraph._p in toc_paragraphs:
+            continue
+        if title is not None and paragraph._p is title._p:
+            continue
         text = paragraph.text.strip()
         if not text:
             continue
@@ -96,3 +106,4 @@ def build_violation_report(document: DocumentSnapshot, rule: dict[str, Any]) -> 
         "violations": violations[:30],
         "rule": rule,
     }
+
